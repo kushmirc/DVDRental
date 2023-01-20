@@ -1,0 +1,96 @@
+--Section B starts here.
+CREATE TABLE rental_detail (
+rental_id integer PRIMARY KEY,
+store_id smallint,
+film_id smallint,
+rental_date timestamp without time zone,
+return_date timestamp without time zone
+);
+
+CREATE TABLE rental_summary (
+store_id smallint,
+film_id smallint,
+times_rented smallint
+);
+
+
+SELECT * FROM rental_detail
+ORDER BY rental_id DESC;
+
+SELECT * FROM rental_summary;
+
+--DROP TABLE rental_detail;
+--DROP TABLE rental_summary;
+--DROP TRIGGER new_rental ON rental_detail;
+--DROP FUNCTION update_summary();
+--DROP PROCEDURE refresh();
+
+
+--Section C starts here.
+INSERT INTO rental_detail (rental_id, store_id, film_id, rental_date, return_date)
+SELECT DISTINCT ON (rental_id) rental_id, store_id, film_id, rental_date, return_date
+FROM rental
+INNER JOIN inventory
+ON rental.inventory_id = inventory.inventory_id;
+
+
+--Section D starts here.
+ALTER TABLE rental_detail
+ADD days_rented_out interval;
+
+UPDATE rental_detail
+SET days_rented_out = (return_date - rental_date);
+
+
+--Section E starts here.
+CREATE FUNCTION update_summary()
+RETURNS TRIGGER
+LANGUAGE PLPGSQL
+AS
+$$
+BEGIN
+DELETE FROM rental_summary;
+
+INSERT INTO rental_summary
+SELECT store_id, film_id, COUNT(*)
+FROM rental_detail
+GROUP BY store_id, film_id
+ORDER BY store_id, film_id ASC;
+
+RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER new_rental
+AFTER INSERT
+ON rental_detail
+FOR EACH STATEMENT
+EXECUTE PROCEDURE update_summary();
+
+INSERT INTO rental_detail (rental_id, store_id, film_id, rental_date, return_date)
+VALUES (133397, 1, 1, '2016-08-01 23:39:21', '2016-08-02; 23:39:21');
+
+
+--Section F starts here.
+CREATE PROCEDURE refresh()
+LANGUAGE PLPGSQL
+AS
+$$
+BEGIN
+DELETE FROM rental_detail;
+DELETE FROM rental_summary;
+
+INSERT INTO rental_detail (rental_id, store_id, film_id, rental_date, return_date)
+SELECT DISTINCT ON (rental_id) rental_id, store_id, film_id, rental_date, return_date
+FROM rental
+INNER JOIN inventory
+ON rental.inventory_id = inventory.inventory_id;
+
+END;
+$$;
+
+CALL refresh();
+
+/*This stored procedure should be executed bi-weekly. A weekly execution would not
+provide enough value to justify the time it takes to perform and review, and the
+information from a monthly execution wouldn't be timely enough.*/
