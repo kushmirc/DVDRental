@@ -24,15 +24,21 @@ The report should be refreshed bi-weekly.  The inventory manager needs to decide
 ## Project execution screenshots:
 Create rental_detail and rental_summary tables:
 ![B](https://user-images.githubusercontent.com/107213928/213591156-95d64512-38b3-4223-ad83-4221bf05e69f.png)
-
+<br><br>
 
 Extract data and insert into rental_detail table:
 ![C](https://user-images.githubusercontent.com/107213928/213591228-b1968918-252f-48dd-afdb-2a5d1f6d86da.png)
-
+<br><br>
 
 Data transformation.  Add column days_rented_out, and set the timestamp interval:
 ![D1](https://user-images.githubusercontent.com/107213928/213591353-65edd439-0f91-438c-a77d-2591499f9430.png)
 ![D2](https://user-images.githubusercontent.com/107213928/213591366-f6335110-c834-4c1e-846f-a633123ca27d.png)
+<br><br>
 
+Create function and trigger to update the rental_summary table when a new record is added:
+![E](https://user-images.githubusercontent.com/107213928/213591782-a3fa8522-32eb-498e-bbe1-4d2cfbc3c17e.png)
+<br><br>
 
-
+Create a stored procedure to refresh the data in the rental_detail and rental_summary tables, and then call the procedure:
+![F1](https://user-images.githubusercontent.com/107213928/213591843-017fd3dd-1d23-4bdc-a843-36a9321aba4f.png)
+![F2](https://user-images.githubusercontent.com/107213928/213591856-b748ab64-5433-438e-aefc-84b0050b1441.png)
