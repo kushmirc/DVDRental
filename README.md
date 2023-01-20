@@ -6,19 +6,22 @@
 
 
 ## Introduction:
-This project involved working with Ubuntu on Linux.  One of my hobbies is teaching English to people from other countries, and I wanted to use Linux in a scenario related to teaching English.  
+This project uses the DVD Rental sample database included in PostgreSQL.  The scenario is that of the DVD Rental Company inventory manager who wants to determine how many copies of each DVD should be stocked on the shelves.  To make this decision, the manager needs to know which DVDs are rented most frequently, and how many days they are rented for.  This information needs to be store-specific because each store has their own stock of DVDs on the shelves.  
 
-If I worked with a group of fellow English teachers, for example, who all wanted to access English teaching materials on my Linux server, I would need a solution to allow all of them to browse, search, and download the contents of my workstation from their own different physical locations through a virtual private network.  The current scope of this project was to set it up with my local computer as the host.  Future improvements would include setting up the VPN to actually make it accessible from other computers.  
+The data used for the report includes rental information about the DVDs, such as the dates rented and returned. It also includes information identifying which store the DVDs are from, and what films they are.  
 
-I used Apache as the local web server. I installed Recoll, a free file management system which works on Linux, as an alternative to the native Nautilus file management system on Unbutu.  Recoll has the ability to index files and allows my team to search for files by type, such as “*pdf” through a Web UI.   
+There are two source tables needed to provide the data necessary for the detailed and summary sections of the report.  These tables are the rental table and the inventory table.  The two new tables created are the rental_detail, and rental_summary tables.
 
-I used VMWare to install and run Linux on a virtual machine loaded on my personal Macbook to isolate it from the rest of my work.  
+The fields that are included in the detailed and summary reports from the source data rental table are the rental _id, rental_date, and return_date fields.  The fields included from the source data inventory table are the the store_id field, the film_id field.  
 
-When looking at VMWare’s website, I noticed that there is WMWare Workstation and VMWare Fusion.  I did some Googling to determine the difference between Workstation and Fusion, and discovered that Workstation is for Windows, while Fusion is for Mac.  Since have a Mac, I installed Fusion.  
+A data transformation included is the days_rented_out field in the detailed report which calculates the difference, in days and time, between the rental_date, and the return_date fields from the rental table. The days_rented_out field allows the inventory manager to quickly identify DVDs which were kept for an especially long period of time, and which were therefore unavailable for rental during that time.  
 
-This document serves as a manual that others can use to accomplish the same thing, should they wish to do so.  
+The detail table provides a record of every rental record in the report.  This will be useful because it will indicate how many total rentals have taken place.  It will also show the number of days that a DVD was rented out for each rental.  The summary table shows the total number of times rented for each DVD (film_id) at each store.  
 
-## Manual Body:
+The report should be refreshed bi-weekly.  The inventory manager needs to decide how often to evaluate the relative popularity of DVD titles to adjust and optimize the stock levels accordingly.  If he does it too often though, weekly for example, it will take too much time away from other duties while providing relatively little benefit.  However, monthly wouldn’t be frequent enough because the popularity of movie titles is likely to fluctuate significantly over a one-month span.  
+
+
+## Project execution screenshots:
 1. Download the Unbutu Linux desktop ISO file. 
 
 ![step 1](https://user-images.githubusercontent.com/107213928/187050374-7c679587-2d92-4809-9f95-3ed6c1b6887b.png)
